@@ -1,5 +1,6 @@
 package entities;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
@@ -25,17 +26,32 @@ public class Entity {
 		this.position.y += dy;
 		this.position.z += dz;
 	}
-	
+
+	public void increaseRotation(Vector3f axis, float w){
+		this.rotX += axis.x * w;
+		this.rotX += axis.x * w;
+		this.rotX += axis.x * w;
+	}
+
 	void increaseRotation(float dx, float dy, float dz){
 		this.rotX += dx;
 		this.rotY += dy;
 		this.rotZ += dz;
 	}
 
-	void setRotation(float dx, float dy, float dz){
+	public void setRotation(float dx, float dy, float dz){
 		this.rotX = dx;
 		this.rotY = dy;
 		this.rotZ = dz;
+	}
+
+	void increaseRoll(float angle){
+		float validRotY = this.rotY % 360;
+		float toRotateX = (float) -Math.cos(Math.toRadians(validRotY));
+		float toRotateZ = (float) Math.sin(Math.toRadians(validRotY));
+		increaseRotation(angle * toRotateX, 0, 0);
+		if (Keyboard.isKeyDown(Keyboard.KEY_R))
+			System.out.println(rotY + ": " + toRotateX + ", " + toRotateZ);
 	}
 
 	public TexturedModel getModel() {

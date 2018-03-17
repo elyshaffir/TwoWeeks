@@ -1,27 +1,35 @@
 package entities;
 
+import org.lwjgl.Sys;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
-
-import java.lang.management.MonitorInfo;
 
 
 public class Camera {
 
 	private Vector3f position = new Vector3f(0, 0, 0);
 	private float pitch = 0;
+	private float basePitch = 0;
 	private float yaw = 0;
 	private float roll = 0;
 	private float distanceFromEntity = 50;
 	private float baseAngleAroundEntity = 0;
 	private float angleAroundEntity = 0;
+	private float angleAroundEntityPitch = 0;
+	private float angleAroundEntityRoll = 0;
 	private boolean middleMouseButton = false;
 
 
 	public Camera(){}
-	public Camera(float angleAroundEntity){
+	public Camera(float angleAroundEntity, float pitch, float roll){
 		this.angleAroundEntity = angleAroundEntity;
 		this.baseAngleAroundEntity = angleAroundEntity;
+		this.pitch = pitch;
+		this.basePitch = pitch;
+		this.angleAroundEntityPitch = pitch;
+		this.roll = roll;
+		this.angleAroundEntityRoll = roll;
 	}
 
 
@@ -32,7 +40,7 @@ public class Camera {
 	private void calculatePitch(){
 		if (Mouse.isButtonDown(2)){
 			middleMouseButton = true;
-			pitch -= Mouse.getDY() * .1f;
+			angleAroundEntityPitch -= Mouse.getDY() * .1f;
 		}
 	}
 
@@ -53,9 +61,10 @@ public class Camera {
 	}
 
 	private void calculateCameraPosition(Entity cameraEntity, float horizontalDistance, float verticalPosition){
-		if (!Mouse.isButtonDown(2) && middleMouseButton){
+		if (!Mouse.isButtonDown(2) && middleMouseButton && !Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
 			middleMouseButton = false;
 			angleAroundEntity = baseAngleAroundEntity;
+			angleAroundEntityPitch = basePitch;
 		}
 
 		float theta = cameraEntity.getRotY() + angleAroundEntity;
@@ -74,6 +83,8 @@ public class Camera {
 		float verticalDistance = calculateVerticalDistance();
 		calculateCameraPosition(cameraEntity, horizontalDistance, verticalDistance);
 		this.yaw = 180 - (cameraEntity.getRotY() + angleAroundEntity);
+		this.pitch = (cameraEntity.getRotZ() + angleAroundEntityPitch);
+		this.roll = (cameraEntity.getRotX() + angleAroundEntityRoll);
 	}
 
 
