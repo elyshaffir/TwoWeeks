@@ -8,6 +8,11 @@ import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import terrain.Terrain;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public class Player extends Entity {
 
     private static final float TURN_SPEED = 70;
@@ -19,13 +24,15 @@ public class Player extends Entity {
     private float currentRollSpeed = 0;
     private float currentTurnSpeed = 0;
     private float upwardsSpeed = 0;
+    private float yExtra = 0;
 
-    public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+    public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale, float yExtra) {
         super(model, position, rotX, rotY, rotZ, scale);
+        this.yExtra = yExtra;
     }
 
-    public void move2D(Terrain terrain){
-        checkInputs(0, false, .1f);
+    public void move2D(Terrain terrain, String heightMap, boolean spin){
+        checkInputs(0, false, spin, .1f, .05f);
         float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
         float dx = (float) -(distance * Math.cos(Math.toRadians(super.getRotY())));
         float dz = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
@@ -33,9 +40,10 @@ public class Player extends Entity {
         upwardsSpeed += GRAVITY * DisplayManager.getFrameTimeSeconds();
         super.increasePosition(0, upwardsSpeed * DisplayManager.getFrameTimeSeconds(), 0);
         float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
-        if (super.getPosition().y < terrainHeight){
+        if (super.getPosition().y < terrainHeight + yExtra){
             upwardsSpeed = 0;
-            super.getPosition().y = terrainHeight;
+            super.getPosition().y = terrainHeight + yExtra;
+            terrainAdjust(terrain, heightMap);
         }
     }
 
@@ -43,7 +51,7 @@ public class Player extends Entity {
         // FIXME: The camera is fucked with the roll.
         // FIXME: Roll is rolling the opposite direction when facing the opposite direction.
         // TODO: Fix camera on roll, fix roll, then movement.
-        checkInputs(.25f, true, 0);
+        checkInputs(.25f, true, false, 0, 0);
         super.increaseRotation(0, 0, currentPitchSpeed * DisplayManager.getFrameTimeSeconds());
         super.increaseRoll(currentRollSpeed * DisplayManager.getFrameTimeSeconds());
         // the roll is relative to the world
@@ -54,7 +62,30 @@ public class Player extends Entity {
         super.increasePosition(dx, -dy, dz);
     }
 
-    private void checkInputs(float mouseSensetivity, boolean controlPitch, float acceleration){
+    private void terrainAdjust(Terrain terrain, String heightMap){ // FIXME: Precision.
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File("res/" + heightMap + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int VERTEX_COUNT = image.getHeight();
+        int xIndex = (int) ((super.getPosition().x * VERTEX_COUNT) / Terrain.SIZE);
+        int zIndex = (int) ((super.getPosition().z * VERTEX_COUNT) / Terrain.SIZE);
+        Vector3f normal = terrain.calculateNormal(xIndex, zIndex, image);
+        float targetRotZ = normal.z * 20;
+        targetRotZ *= (float) Math.sin(Math.toRadians(super.getRotY()));
+        // super.setRotZ(toRotateZ);
+        if (super.getRotZ() < targetRotZ)
+            if (targetRotZ - super.getRotZ() < 1) {super.setRotZ(targetRotZ);}
+            else {super.increaseRotation(0, 0, 1);}
+        else if (super.getRotZ() > targetRotZ)
+            if (super.getRotZ() - targetRotZ < 1) {super.setRotZ(targetRotZ);}
+            else {super.increaseRotation(0, 0, -1);}
+    }
+
+    private void checkInputs(float mouseSensetivity, boolean controlPitch, boolean spin, float acceleration, float drag){
         if (controlPitch)
             if (Keyboard.isKeyDown(Keyboard.KEY_W)){
                 currentPitchSpeed = TURN_SPEED;
@@ -73,7 +104,17 @@ public class Player extends Entity {
                 currentSpeed -= acceleration;
             }
             else{
-                currentSpeed = speed;
+                // currentSpeed = speed;
+                if (currentSpeed > 0){
+                    currentSpeed -= drag;
+                    if (currentSpeed < drag)
+                        currentSpeed = 0;
+                }
+                else if (currentSpeed < 0){
+                    currentSpeed += drag;
+                    if (currentSpeed > drag)
+                        currentSpeed = 0;
+                }
             }
 
         if (mouseSensetivity != 0)
@@ -107,6 +148,8 @@ public class Player extends Entity {
             super.increaseRotation(0, -Mouse.getDX() * mouseSensetivity, 0);
         else if (mouseSensetivity == 0)
             super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
+        if (spin)
+            super.increaseRotation(0, 0, currentSpeed * -GRAVITY * DisplayManager.getFrameTimeSeconds());
     }
 
     public float getSpeed() {

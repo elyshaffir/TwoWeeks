@@ -11,6 +11,7 @@ public class Entity {
 	private Vector3f position;
 	private float rotX, rotY, rotZ;
 	private float scale;
+
 	public Entity(TexturedModel model, Vector3f position, float rotX,
 			float rotY, float rotZ, float scale) {		
 		this.model = model;
@@ -29,8 +30,8 @@ public class Entity {
 
 	public void increaseRotation(Vector3f axis, float w){
 		this.rotX += axis.x * w;
-		this.rotX += axis.x * w;
-		this.rotX += axis.x * w;
+		this.rotY += axis.y * w;
+		this.rotZ += axis.z * w;
 	}
 
 	void increaseRotation(float dx, float dy, float dz){

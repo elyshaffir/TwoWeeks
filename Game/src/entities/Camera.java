@@ -75,7 +75,7 @@ public class Camera {
 		position.z = cameraEntity.getPosition().z - offsetZ;
 	}
 
-	public void move(Entity cameraEntity){
+	public void move(Entity cameraEntity, boolean followPitch){
 		calculateZoom();
 		calculatePitch();
 		calculateAngleAroundEntity();
@@ -83,7 +83,10 @@ public class Camera {
 		float verticalDistance = calculateVerticalDistance();
 		calculateCameraPosition(cameraEntity, horizontalDistance, verticalDistance);
 		this.yaw = 180 - (cameraEntity.getRotY() + angleAroundEntity);
-		this.pitch = (cameraEntity.getRotZ() + angleAroundEntityPitch);
+		if (followPitch)
+			this.pitch = (cameraEntity.getRotZ() + angleAroundEntityPitch);
+		else
+			this.pitch = (angleAroundEntityPitch);
 		this.roll = (cameraEntity.getRotX() + angleAroundEntityRoll);
 	}
 

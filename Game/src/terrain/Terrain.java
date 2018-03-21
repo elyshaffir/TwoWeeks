@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class Terrain {
 
-    private static final float SIZE = 800;
+    public static final float SIZE = 800;
     private static final float MAX_HEIGHT = 40;
     private static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
 
@@ -80,8 +80,8 @@ public class Terrain {
         float[] textureCoords = new float[count*2];
         int[] indices = new int[6*(VERTEX_COUNT-1)*(VERTEX_COUNT-1)];
         int vertexPointer = 0;
-        for(int i=0;i<VERTEX_COUNT;i++){
-            for(int j=0;j<VERTEX_COUNT;j++){
+        for(int i = 0; i < VERTEX_COUNT; i++){
+            for(int j = 0; j < VERTEX_COUNT; j++){
                 vertices[vertexPointer*3] = (float)j/((float)VERTEX_COUNT - 1) * SIZE;
                 float height = getHeight(j, i, image);
                 heights[j][i] = height;
@@ -114,7 +114,7 @@ public class Terrain {
         return loader.loadToVAO(vertices, textureCoords, normals, indices);
     }
 
-    private Vector3f calculateNormal(int x, int z, BufferedImage heightMap){
+    public Vector3f calculateNormal(int x, int z, BufferedImage heightMap){
         float heightL = getHeight(x - 1, z, heightMap);
         float heightR = getHeight(x + 1, z, heightMap);
         float heightD = getHeight(x, z - 1, heightMap);
@@ -153,4 +153,5 @@ public class Terrain {
     public TerrainTexture getBlendMap() {
         return blendMap;
     }
+
 }

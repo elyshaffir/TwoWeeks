@@ -42,8 +42,8 @@ public class Loader {
 	}
 
 	public int loadTexture(String filename){
-		if (filename == "")
-			filename = "blankTexture";
+		if (filename.equals(""))
+			filename = "textures/blankTexture";
 		Texture texture = null;
 		try{
 			texture = TextureLoader.getTexture("PNG", new FileInputStream("res/" + filename + ".png"));
