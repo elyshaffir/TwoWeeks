@@ -1,27 +1,17 @@
 package engineTester;
 
 import entities.*;
+import gameUtil.CarPlayer;
 import guis.GuiRenderer;
-import guis.GuiTexture;
-import models.RawModel;
-import models.TexturedModel;
-
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
-import renderEngine.OBJLoader;
 import terrain.Terrain;
-import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class MainGameLoop {
 
@@ -29,16 +19,6 @@ public class MainGameLoop {
 		
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
-
-		RawModel model = OBJLoader.loadObjModel("models/chasi", loader);
-		// RawModel model = OBJLoader.loadObjModel("models/wheels", loader);
-		
-		TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("skybox/back")));
-		ModelTexture texture = staticModel.getTexture();
-		texture.setShineDamper(1);
-		texture.setReflectivity(1);
-
-		Player player = new Player(staticModel, new Vector3f(250, 100, 250), 0, 0, 0, 1, 1.5f);
 
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
 		Camera camera = new Camera(-90, 20, 0);
@@ -60,12 +40,17 @@ public class MainGameLoop {
 
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		MasterRenderer renderer = new MasterRenderer(loader);
-		
-		
+
+		CarPlayer localPlayer = new CarPlayer(loader, "models/chasi", "",
+				new Vector3f(250, 100, 250), "models/wheels", "",
+				new Vector3f(248, 100, 250), new Vector3f(254.5f, 100, 250));
+
 		while (!Display.isCloseRequested()){
-			camera.move(player, false);
-			player.move2D(terrain, "terrain/heightmap", false);
-			renderer.processEntity(player);
+			camera.move(localPlayer.getPlayer(), false);
+			localPlayer.playLocal("terrain/heightmap", terrain);
+			renderer.processEntity(localPlayer.getPlayer());
+			renderer.processEntity(localPlayer.getFrontWheels());
+			renderer.processEntity(localPlayer.getBackWheels());
 			renderer.processTerrain(terrain);
 			renderer.render(light, camera);
 			// guiRenderer.render(guis);

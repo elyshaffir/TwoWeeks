@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
+import renderEngine.DisplayManager;
 
 public class Entity {
 
@@ -55,6 +56,16 @@ public class Entity {
 			System.out.println(rotY + ": " + toRotateX + ", " + toRotateZ);
 	}
 
+	public void stick(Player player, float forward){
+		setPosition(
+				new Vector3f(
+						player.getPosition().x + (float) -(forward * Math.cos(Math.toRadians(player.getRotY()))),
+						player.getPosition().y,
+						player.getPosition().z + (float) (forward * Math.sin(Math.toRadians(player.getRotY())))
+				)
+		);
+	}
+
 	public TexturedModel getModel() {
 		return model;
 	}
@@ -101,5 +112,5 @@ public class Entity {
 	
 	public void setScale(float scale) {
 		this.scale = scale;
-	}	
+	}
 }

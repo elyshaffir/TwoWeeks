@@ -1,6 +1,5 @@
 package entities;
 
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
@@ -61,7 +60,7 @@ public class Camera {
 	}
 
 	private void calculateCameraPosition(Entity cameraEntity, float horizontalDistance, float verticalPosition){
-		if (!Mouse.isButtonDown(2) && middleMouseButton && !Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
+		if (!Mouse.isButtonDown(2) && middleMouseButton && !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
 			middleMouseButton = false;
 			angleAroundEntity = baseAngleAroundEntity;
 			angleAroundEntityPitch = basePitch;

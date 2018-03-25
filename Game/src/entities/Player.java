@@ -31,7 +31,7 @@ public class Player extends Entity {
         this.yExtra = yExtra;
     }
 
-    public void move2D(Terrain terrain, String heightMap, boolean spin){
+    public void move2D(Terrain terrain, String heightMap, boolean spin, boolean doTerrainAdjust){
         checkInputs(0, false, spin, .1f, .05f);
         float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
         float dx = (float) -(distance * Math.cos(Math.toRadians(super.getRotY())));
@@ -43,9 +43,11 @@ public class Player extends Entity {
         if (super.getPosition().y < terrainHeight + yExtra){
             upwardsSpeed = 0;
             super.getPosition().y = terrainHeight + yExtra;
-            terrainAdjust(terrain, heightMap);
+            if (doTerrainAdjust)
+                terrainAdjust(terrain, heightMap);
         }
     }
+
 
     public void moveAllAxis(){ // // FIXME: Rotation and position should be relative to the model, not the world! (headless mode).
         // FIXME: The camera is fucked with the roll.
@@ -61,6 +63,7 @@ public class Player extends Entity {
         float dz = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
         super.increasePosition(dx, -dy, dz);
     }
+
 
     private void terrainAdjust(Terrain terrain, String heightMap){ // FIXME: Precision.
         BufferedImage image = null;
@@ -152,19 +155,12 @@ public class Player extends Entity {
             super.increaseRotation(0, 0, currentSpeed * -GRAVITY * DisplayManager.getFrameTimeSeconds());
     }
 
-    public float getSpeed() {
-        return speed;
+    public void setPosition(Vector3f position)
+    {
+        super.setPosition(position);
     }
 
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
-
-    public static float getTurnSpeed() {
-        return TURN_SPEED;
-    }
-
-    public float getCurrentRollSpeed() {
-        return this.currentRollSpeed;
+    public float getCurrentSpeed() {
+        return currentSpeed;
     }
 }
