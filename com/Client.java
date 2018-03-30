@@ -1,4 +1,4 @@
-package old1;
+package com;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,6 +8,15 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Client extends Thread{
+
+    private String toSend = "HAAAAAWDIHO!";
+
+    Client(String toSend) {
+        this.toSend = toSend;
+    }
+
+    Client() {
+    }
 
     public void run() {
         String serverName = "127.0.0.1";
@@ -24,14 +33,13 @@ public class Client extends Thread{
             Socket newClient = new Socket(serverName, newPort);
             OutputStream outToServer = newClient.getOutputStream();
             DataOutputStream out = new DataOutputStream(outToServer);
+            inFromServer = newClient.getInputStream();
             in = new DataInputStream(inFromServer);
 
-            /*
-            out.writeUTF("HAAAAAWDIHO!");
-            in.readUTF();
-            */
+            out.writeUTF(toSend);
 
             // Communication code!
+            System.out.println(in.readUTF());
 
             newClient.close();
 

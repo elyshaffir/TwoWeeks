@@ -1,4 +1,4 @@
-package old1;
+package com;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -6,11 +6,17 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Server extends Thread {
 
     private ServerSocket serverSocket;
+    private Socket server;
+
+    private List<String> pendingData = new ArrayList<>();
+    private List<String> pendingDataToSend = new ArrayList<>();
 
     Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
@@ -22,19 +28,53 @@ public class Server extends Thread {
 
             // serverSocket.getLocalPort();
 
-            Socket server = serverSocket.accept();
+            server = serverSocket.accept();
 
-            DataOutputStream out = new DataOutputStream(server.getOutputStream());
             DataInputStream in = new DataInputStream(server.getInputStream());
 
-            in.readUTF();
+            String dataReceived = in.readUTF();
+            System.out.println(dataReceived);
+            pendingData.add(dataReceived);
 
-            server.close();
             serverSocket.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    List<String> retrievePendingData(){
+        List<String> ret = new ArrayList<>(pendingData);
+        pendingData = new ArrayList<>();
+        return ret;
+    }
+
+    Socket getServer() {
+        return server;
+    }
+
+    void addPendingDataToSend(List<String> toAdd){
+        pendingDataToSend.addAll(toAdd);
+    }
+
+    void setPendingDataToSend(List<String> pendingDataToSend) {
+        this.pendingDataToSend = pendingDataToSend;
+    }
+
+    void sendPendingData(){
+        try {
+            DataOutputStream out = new DataOutputStream(server.getOutputStream());
+            out.writeUTF(pendingDataToSend.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<String> getPendingData() {
+        return pendingData;
+    }
+
+    public void setPendingData(List<String> pendingData) {
+        this.pendingData = pendingData;
     }
 }
