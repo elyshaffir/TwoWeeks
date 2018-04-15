@@ -1,7 +1,9 @@
 package engineTester;
 
 import entities.*;
+import gameCom.Client;
 import gameUtil.CarPlayer;
+import gameUtil.OtherCarPlayers;
 import guis.GuiRenderer;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -15,8 +17,8 @@ import textures.TerrainTexturePack;
 
 public class MainGameLoop {
 
-	public static void main(String[] args) {					
-		
+	public static void main(String[] args) {
+
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 
@@ -33,11 +35,6 @@ public class MainGameLoop {
 
 		Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap, "terrain/heightmap");
 
-		// List<GuiTexture> guis = new ArrayList<>();
-		// GuiTexture gui = new GuiTexture(loader.loadTexture("misc/image"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
-		// guis.add(gui);
-
-
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		MasterRenderer renderer = new MasterRenderer(loader);
 
@@ -45,21 +42,30 @@ public class MainGameLoop {
 				new Vector3f(250, 100, 250), "models/wheels", "",
 				new Vector3f(248, 100, 250), new Vector3f(254.5f, 100, 250));
 
+		OtherCarPlayers.setClient(new Client(1));
+		OtherCarPlayers.getClient().start();
+
 		while (!Display.isCloseRequested()){
 			camera.move(localPlayer.getPlayer(), false);
 			localPlayer.playLocal("terrain/heightmap", terrain);
+
 			renderer.processEntity(localPlayer.getPlayer());
 			renderer.processEntity(localPlayer.getFrontWheels());
 			renderer.processEntity(localPlayer.getBackWheels());
 			renderer.processTerrain(terrain);
 			renderer.render(light, camera);
-			// guiRenderer.render(guis);
+
+			OtherCarPlayers.sendCar(localPlayer);
+			OtherCarPlayers.loadAllOtherCars(loader);
+			OtherCarPlayers.renderAllOtherCars(renderer);
+
 			DisplayManager.updateDisplay();
 		}
+		OtherCarPlayers.getClient().setDataToSend("KK");
 		guiRenderer.cleanUp();
-		renderer.cleanUp();		
+		renderer.cleanUp();
 		loader.cleanUp();
-		DisplayManager.closeDisplay();		
+		DisplayManager.closeDisplay();
 	}
 
 }

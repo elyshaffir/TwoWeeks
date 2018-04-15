@@ -2,12 +2,10 @@ package gameUtil;
 
 
 import entities.Player;
-import guis.GuiRenderer;
 import models.RawModel;
 import models.TexturedModel;
 import org.lwjgl.util.vector.Vector3f;
 import renderEngine.Loader;
-import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import terrain.Terrain;
 import textures.ModelTexture;
@@ -24,6 +22,11 @@ public class CarPlayer {
     private Player frontWheels;
     private Player backWheels;
 
+    private String chasiModelString;
+    private String chasiTextureString;
+    private String wheelsModelString;
+    private String wheelsTextureString;
+
     public CarPlayer(Loader loader, String chasiModel, String chasiTexture, Vector3f playerLocation, String wheelsModel,
                      String wheelsTexture, Vector3f frontWheelsLocation, Vector3f backWheelsLocation){
 
@@ -32,6 +35,8 @@ public class CarPlayer {
         this.chasiTexture = chasiStaticModel.getTexture();
         this.chasiTexture.setShineDamper(1);
         this.chasiTexture.setReflectivity(1);
+        this.chasiModelString = chasiModel;
+        this.chasiTextureString = chasiTexture;
 
         this.player = new Player(chasiStaticModel, playerLocation, 0, 0, 0, 1, 1.5f);
 
@@ -40,6 +45,8 @@ public class CarPlayer {
         this.wheelsTexture = wheelsStaticModel.getTexture();
         this.wheelsTexture.setShineDamper(1);
         this.wheelsTexture.setReflectivity(1);
+        this.wheelsModelString = wheelsModel;
+        this.wheelsTextureString = wheelsTexture;
 
         this.frontWheels = new Player(wheelsStaticModel, frontWheelsLocation, 0, 0, 0, 1, 1.5f);
         this.backWheels = new Player(wheelsStaticModel, backWheelsLocation, 0, 0, 0, 1, 1.5f);
@@ -63,5 +70,21 @@ public class CarPlayer {
 
     public Player getPlayer() {
         return player;
+    }
+
+    String getChasiModelString() {
+        return chasiModelString;
+    }
+
+    String getChasiTextureString() {
+        return chasiTextureString;
+    }
+
+    String getWheelsModelString() {
+        return wheelsModelString;
+    }
+
+    String getWheelsTextureString() {
+        return wheelsTextureString;
     }
 }
