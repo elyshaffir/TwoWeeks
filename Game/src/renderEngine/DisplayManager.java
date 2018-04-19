@@ -23,7 +23,7 @@ public class DisplayManager {
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat(), attribs);
-			Display.setTitle("DISP");
+			Display.setTitle("Cars");
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}

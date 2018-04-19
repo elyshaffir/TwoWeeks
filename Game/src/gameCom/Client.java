@@ -22,7 +22,7 @@ public class Client extends Thread {
             System.out.println("The Client is sending messages to server...");
             // Sending messages to the server
             while (!Objects.equals(dataToSend, "KK")){
-                byte[] message = (String.valueOf(id) + dataToSend).getBytes();
+                byte[] message = ("{" + dataToSend + "###}").getBytes();
                 ByteBuffer buffer = ByteBuffer.wrap(message);
                 client.write(buffer);
                 ByteBuffer readBuffer = ByteBuffer.allocate(256);

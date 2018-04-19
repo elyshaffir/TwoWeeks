@@ -38,8 +38,8 @@ public class MainGameLoop {
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		MasterRenderer renderer = new MasterRenderer(loader);
 
-		CarPlayer localPlayer = new CarPlayer(loader, "models/chasi", "",
-				new Vector3f(250, 100, 250), "models/wheels", "",
+		CarPlayer localPlayer = new CarPlayer(loader, "models/chasi", "textures/blankTexture",
+				new Vector3f(250, 100, 250), "models/wheels", "textures/blankTexture",
 				new Vector3f(248, 100, 250), new Vector3f(254.5f, 100, 250));
 
 		OtherCarPlayers.setClient(new Client(1));
@@ -55,7 +55,7 @@ public class MainGameLoop {
 			renderer.processTerrain(terrain);
 			renderer.render(light, camera);
 
-			OtherCarPlayers.sendCar(localPlayer);
+			OtherCarPlayers.sendCar(localPlayer, 1);
 			OtherCarPlayers.loadAllOtherCars(loader);
 			OtherCarPlayers.renderAllOtherCars(renderer);
 

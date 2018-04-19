@@ -15,7 +15,7 @@ import terrain.Terrain;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
-public class MainGameLoop1 {
+public class MainGameLoopBackup {
 
     public static void main(String[] args) {
 
@@ -38,30 +38,24 @@ public class MainGameLoop1 {
         GuiRenderer guiRenderer = new GuiRenderer(loader);
         MasterRenderer renderer = new MasterRenderer(loader);
 
-        CarPlayer localPlayer = new CarPlayer(loader, "models/chasi", "textures/blankTexture",
-                new Vector3f(250, 100, 250), "models/wheels", "textures/blankTexture",
+        CarPlayer car = new CarPlayer(loader, "models/chasi", "",
+                new Vector3f(250, 100, 250), "models/wheels", "",
                 new Vector3f(248, 100, 250), new Vector3f(254.5f, 100, 250));
 
-        OtherCarPlayers.setClient(new Client(2));
-        OtherCarPlayers.getClient().start();
 
         while (!Display.isCloseRequested()){
-            camera.move(localPlayer.getPlayer(), false);
-            localPlayer.playLocal("terrain/heightmap", terrain);
+            camera.move(car.getPlayer(), false);
+            car.playLocal("terrain/heightmap", terrain);
 
-            renderer.processEntity(localPlayer.getPlayer());
-            renderer.processEntity(localPlayer.getFrontWheels());
-            renderer.processEntity(localPlayer.getBackWheels());
+            renderer.processEntity(car.getPlayer());
+            renderer.processEntity(car.getFrontWheels());
+            renderer.processEntity(car.getBackWheels());
             renderer.processTerrain(terrain);
             renderer.render(light, camera);
 
-            OtherCarPlayers.sendCar(localPlayer, 2);
-            OtherCarPlayers.loadAllOtherCars(loader);
-            OtherCarPlayers.renderAllOtherCars(renderer);
-
             DisplayManager.updateDisplay();
+            break;
         }
-        OtherCarPlayers.getClient().setDataToSend("KK");
         guiRenderer.cleanUp();
         renderer.cleanUp();
         loader.cleanUp();

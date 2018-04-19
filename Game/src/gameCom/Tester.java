@@ -3,8 +3,8 @@ package gameCom;
 public class Tester {
     public static void main(String args[]){
         Client client = new Client(1);
-        Client client1 = new Client(1);
-        Client client2 = new Client(1);
+        Client client1 = new Client(2);
+        Client client2 = new Client(3);
 
         Server server = new Server();
         server.start();
