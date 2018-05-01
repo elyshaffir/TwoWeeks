@@ -1,5 +1,7 @@
 package gameCom;
 
+import engineTester.HostingPlayer;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -88,7 +90,9 @@ public class Server extends Thread {
                         } else{
                             byte[] toSendBytes = "X".getBytes();
                             ByteBuffer toSendBuffer = ByteBuffer.wrap(toSendBytes);
-                            client.write(toSendBuffer);
+                            try{
+                                client.write(toSendBuffer);
+                            } catch (IOException ignored){}
                         }
                     }
                     itr.remove();
@@ -103,5 +107,14 @@ public class Server extends Thread {
     public static void main(String args[]){
         Server s = new Server();
         s.start();
+        /*
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        HostingPlayer hostingPlayer = new HostingPlayer();
+        hostingPlayer.run();
+         */
     }
 }
