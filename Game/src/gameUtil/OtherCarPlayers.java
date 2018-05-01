@@ -93,6 +93,10 @@ public class OtherCarPlayers {
                     }
                 }
             }
+            else if (client.getDataFromServer().length() > 1){
+                // When the message is corrupted it creates fuckups in the communication later, needs cleaning.
+                client.resetDataFromServer();
+            }
         } catch (IndexOutOfBoundsException ignored){}
     }
 
@@ -110,9 +114,5 @@ public class OtherCarPlayers {
 
     public static Client getClient() {
         return client;
-    }
-
-    public static HashMap<Integer, CarPlayer> getOtherCars() {
-        return otherCars;
     }
 }
