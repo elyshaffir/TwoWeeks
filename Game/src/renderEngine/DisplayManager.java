@@ -17,13 +17,13 @@ public class DisplayManager {
 	private static long lastFrameTime;
 	private static float delta;
 
-	public static void createDisplay(){				
+	public static void createDisplay(String title){
 		ContextAttribs attribs = new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true);			
 		
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat(), attribs);
-			Display.setTitle("Cars");
+			Display.setTitle(title);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}

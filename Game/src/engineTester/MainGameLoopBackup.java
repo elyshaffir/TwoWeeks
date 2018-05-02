@@ -19,7 +19,7 @@ public class MainGameLoopBackup {
 
     public static void main(String[] args) {
 
-        DisplayManager.createDisplay();
+        DisplayManager.createDisplay("KK");
         Loader loader = new Loader();
 
         Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));

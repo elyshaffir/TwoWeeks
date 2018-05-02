@@ -4,6 +4,7 @@ import entities.*;
 import gameCom.Client;
 import gameUtil.CarPlayer;
 import gameUtil.OtherCarPlayers;
+import gameUtil.WinnerGetter;
 import guis.GuiRenderer;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -17,9 +18,11 @@ import textures.TerrainTexturePack;
 
 public class MainGameLoop2 {
 
+    private final static int ID = 3;
+
     public static void main(String[] args) {
 
-        DisplayManager.createDisplay();
+        DisplayManager.createDisplay(String.valueOf(ID));
         Loader loader = new Loader();
 
         Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
@@ -42,7 +45,7 @@ public class MainGameLoop2 {
                 new Vector3f(250, 100, 250), "models/wheels", "textures/blankTexture",
                 new Vector3f(248, 100, 250), new Vector3f(254.5f, 100, 250));
 
-        OtherCarPlayers.setClient(new Client(3));
+        OtherCarPlayers.setClient(new Client(ID));
         OtherCarPlayers.getClient().start();
 
         while (!Display.isCloseRequested()){
@@ -55,12 +58,16 @@ public class MainGameLoop2 {
             renderer.processTerrain(terrain);
             renderer.render(light, camera);
 
-            OtherCarPlayers.sendCar(localPlayer, 3);
+            OtherCarPlayers.sendCar(localPlayer, ID);
             OtherCarPlayers.loadAllOtherCars(loader);
             OtherCarPlayers.renderAllOtherCars(renderer);
 
+            WinnerGetter.checkWinners(localPlayer, ID);
+
             DisplayManager.updateDisplay();
         }
+        System.out.println(WinnerGetter.getWinners());
+
         OtherCarPlayers.getClient().setDataToSend("KK");
         guiRenderer.cleanUp();
         renderer.cleanUp();

@@ -25,7 +25,7 @@ public class Client extends Thread {
                 byte[] message = ("{" + dataToSend + "###}").getBytes();
                 ByteBuffer buffer = ByteBuffer.wrap(message);
                 client.write(buffer);
-                ByteBuffer readBuffer = ByteBuffer.allocate(256);
+                ByteBuffer readBuffer = ByteBuffer.allocate(1024);
                 client.read(readBuffer);
                 dataFromServer = new String(readBuffer.array()).trim();
                 buffer.clear();
@@ -46,5 +46,9 @@ public class Client extends Thread {
 
     public String getDataFromServer() {
         return dataFromServer;
+    }
+
+    public void resetDataFromServer(){
+        dataFromServer = "";
     }
 }

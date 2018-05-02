@@ -1,7 +1,5 @@
 package gameCom;
 
-import engineTester.HostingPlayer;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -43,7 +41,7 @@ public class Server extends Thread {
                     else if (ky.isReadable()) {
                         // Data is read from the client
                         SocketChannel client = (SocketChannel) ky.channel();
-                        ByteBuffer buffer = ByteBuffer.allocate(256);
+                        ByteBuffer buffer = ByteBuffer.allocate(1024);
                         try{
                             client.read(buffer);
                         } catch (IOException e){
@@ -107,14 +105,5 @@ public class Server extends Thread {
     public static void main(String args[]){
         Server s = new Server();
         s.start();
-        /*
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        HostingPlayer hostingPlayer = new HostingPlayer();
-        hostingPlayer.run();
-         */
     }
 }
