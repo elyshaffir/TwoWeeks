@@ -53,7 +53,7 @@ public class MasterRenderer {
 		prepare();
 		shader.start();
 		shader.loadSkyColor(RED, GREEN, BLUE);
-		shader.loadLight(sun);		
+		shader.loadLight(sun);
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);
 		shader.stop();
@@ -84,7 +84,7 @@ public class MasterRenderer {
 			entities.put(entityModel, newBatch);
 		}
 	}
-	
+
 	public void cleanUp(){
 		shader.cleanUp();
 		terrainShader.cleanUp();

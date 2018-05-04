@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class WinnerGetter {
-    private static final int MAX_X = 400;
+    private static final int MAX_X = 3500;
     private static Queue<Integer> winners = new LinkedList<>(); // Sorted by ID
 
     public static void checkWinners(CarPlayer localPlayer, int localId){

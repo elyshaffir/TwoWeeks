@@ -29,7 +29,7 @@ public class Client extends Thread {
                 client.read(readBuffer);
                 dataFromServer = new String(readBuffer.array()).trim();
                 buffer.clear();
-                Thread.sleep(1);
+                Thread.sleep(15);
             }
             byte[] message = "C".getBytes();
             ByteBuffer buffer = ByteBuffer.wrap(message);

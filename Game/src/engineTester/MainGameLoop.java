@@ -18,7 +18,8 @@ import textures.TerrainTexturePack;
 
 public class MainGameLoop {
 
-	private final static int ID = 1;
+	private final static int ID = 13;
+
 
 	public static void main(String[] args) {
 
@@ -34,23 +35,27 @@ public class MainGameLoop {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("terrain/path"));
 
 		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("terrain/blendMap"));
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("terrain/raceblendMap"));
 
-		Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap, "terrain/heightmap");
+		Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap, "terrain/raceheightmap");
 
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		MasterRenderer renderer = new MasterRenderer(loader);
 
 		CarPlayer localPlayer = new CarPlayer(loader, "models/chasi", "textures/blankTexture",
-				new Vector3f(250, 100, 250), "models/wheels", "textures/blankTexture",
-				new Vector3f(248, 100, 250), new Vector3f(254.5f, 100, 250));
+				"models/wheels", "textures/blankTexture");
+
+		localPlayer.getPlayer().increaseRotation(new Vector3f(0, 1, 0), 270);
+		localPlayer.getFrontWheels().increaseRotation(new Vector3f(0, 1, 0), 270);
+		localPlayer.getBackWheels().increaseRotation(new Vector3f(0, 1, 0), 270);
 
 		OtherCarPlayers.setClient(new Client(ID));
 		OtherCarPlayers.getClient().start();
 
 		while (!Display.isCloseRequested()){
-			camera.move(localPlayer.getPlayer(), false);
-			localPlayer.playLocal("terrain/heightmap", terrain);
+			camera.move(localPlayer.getPlayer(), false, true);
+			if (!WinnerGetter.getWinners().contains(ID))
+				localPlayer.playLocal("terrain/heightmap", terrain);
 
 			renderer.processEntity(localPlayer.getPlayer());
 			renderer.processEntity(localPlayer.getFrontWheels());

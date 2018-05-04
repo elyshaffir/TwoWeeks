@@ -74,10 +74,12 @@ public class Camera {
 		position.z = cameraEntity.getPosition().z - offsetZ;
 	}
 
-	public void move(Entity cameraEntity, boolean followPitch){
-		calculateZoom();
-		calculatePitch();
-		calculateAngleAroundEntity();
+	public void move(Entity cameraEntity, boolean followPitch, boolean locked){
+		if (!locked){
+			calculateZoom();
+			calculatePitch();
+			calculateAngleAroundEntity();
+		}
 		float horizontalDistance = calculateHorizontalDistance();
 		float verticalDistance = calculateVerticalDistance();
 		calculateCameraPosition(cameraEntity, horizontalDistance, verticalDistance);
