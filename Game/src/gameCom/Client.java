@@ -8,6 +8,7 @@ import java.util.Objects;
 
 public class Client extends Thread {
     private int id;
+    private String ipToConnectTo = "localhost";
     private String dataToSend = "";
     private String dataFromServer = "";
 
@@ -15,9 +16,14 @@ public class Client extends Thread {
         this.id = id;
     }
 
+    public Client(int id, String ipToConnectTo) {
+        this.id = id;
+        this.ipToConnectTo = ipToConnectTo;
+    }
+
     public void run() {
         try {
-            InetSocketAddress hA = new InetSocketAddress("localhost", 5000);
+            InetSocketAddress hA = new InetSocketAddress(ipToConnectTo, 5000);
             SocketChannel client = SocketChannel.open(hA);
             System.out.println("The Client is sending messages to server...");
             // Sending messages to the server

@@ -2,6 +2,7 @@ package engineTester;
 
 import entities.*;
 import gameCom.Client;
+import gameCom.Server;
 import gameUtil.CarPlayer;
 import gameUtil.OtherCarPlayers;
 import gameUtil.WinnerGetter;
@@ -20,10 +21,9 @@ public class MainGameLoop {
 
 	private final static int ID = 13;
 
-
 	public static void main(String[] args) {
 
-		DisplayManager.createDisplay(String.valueOf(ID));
+		DisplayManager.createDisplay(String.valueOf(ID), true);
 		Loader loader = new Loader();
 
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
@@ -31,7 +31,7 @@ public class MainGameLoop {
 
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("terrain/grassy2"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("terrain/mud"));
-		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("terrain/grassFlowers"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("terrain/raceEnding"));
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("terrain/path"));
 
 		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);

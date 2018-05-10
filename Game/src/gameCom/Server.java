@@ -14,7 +14,7 @@ public class Server extends Thread {
         try {
             // Get the selector
             Selector selector = Selector.open();
-            System.out.println("Selector is open for making connection: " + selector.isOpen());
+            // System.out.println("Selector is open for making connection: " + selector.isOpen());
             // Get the server socket channel and register using selector
             ServerSocketChannel SS = ServerSocketChannel.open();
             InetSocketAddress hostAddress = new InetSocketAddress("localhost", 5000);
@@ -46,7 +46,7 @@ public class Server extends Thread {
                             client.read(buffer);
                         } catch (IOException e){
                             client.close();
-                            System.out.println("Client disconnected forcibly");
+                            // System.out.println("Client disconnected forcibly");
                             itr.remove();
                             continue;
                         }
@@ -55,7 +55,7 @@ public class Server extends Thread {
                             output = output.substring(1, output.length() - 1);
                             if (Objects.equals(output, "C")) {
                                 client.close();
-                                System.out.println("Client disconnected");
+                                // System.out.println("Client disconnected");
                             }
                             else{
                                 int toSendKey;
@@ -103,6 +103,10 @@ public class Server extends Thread {
     }
 
     public static void main(String args[]){
+        runServer();
+    }
+
+    public static void runServer(){
         Server s = new Server();
         s.start();
     }

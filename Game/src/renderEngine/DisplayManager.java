@@ -8,27 +8,33 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 
+import java.awt.*;
+
 public class DisplayManager {
 
-	private static final int WIDTH = 820;
-	private static final int HEIGHT = 640;
+	private static int width = 820;
+	private static int height = 640;
 	private static final int FPS_CAP = 120;
 
 	private static long lastFrameTime;
 	private static float delta;
 
-	public static void createDisplay(String title){
+	public static void createDisplay(String title, boolean fullScreen){
 		ContextAttribs attribs = new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true);			
 		
 		try {
-			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+			if (!fullScreen)
+				Display.setDisplayMode(new DisplayMode(width, height));
+			else
+				Display.setFullscreen(fullScreen);
 			Display.create(new PixelFormat(), attribs);
 			Display.setTitle(title);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-		
-		GL11.glViewport(0, 0, WIDTH, HEIGHT);
+
+		if (!fullScreen)
+			GL11.glViewport(0, 0, width, height);
 		lastFrameTime = getCurrentTime();
 	}
 	
@@ -52,4 +58,19 @@ public class DisplayManager {
 		return Sys.getTime() * 1000 / Sys.getTimerResolution();
 	}
 
+	public static int getWidth() {
+		return width;
+	}
+
+	public static void setWidth(int width) {
+		DisplayManager.width = width;
+	}
+
+	public static int getHeight() {
+		return height;
+	}
+
+	public static void setHeight(int height) {
+		DisplayManager.height = height;
+	}
 }
