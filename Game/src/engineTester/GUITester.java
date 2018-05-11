@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 
 public class GUITester extends Application implements EventHandler<ActionEvent> {
@@ -17,6 +16,7 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
     private Button connectButton;
     private TextField IPField;
     private TextField IDField;
+    private Stage primaryStage;
 
     public static void main(String[] args){
         launch(args);
@@ -24,6 +24,8 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        this.primaryStage = primaryStage;
 
         Label IPLabel = new Label("IP:");
         IPLabel.setLayoutX(10);
@@ -79,7 +81,7 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
                 IDField.setPromptText("Invalid ID number! try again.");
                 return;
             }
-            RunningPlayer runningPlayer = new RunningPlayer(IPField.getText(), id, false);
+            RunningPlayer runningPlayer = new RunningPlayer(IPField.getText(), id, false, primaryStage);
             runningPlayer.start();
         }
     }

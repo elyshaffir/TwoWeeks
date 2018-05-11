@@ -4,6 +4,7 @@ import entities.*;
 import gameCom.Client;
 import gameCom.Server;
 import gameUtil.CarPlayer;
+import gameUtil.EndScreen;
 import gameUtil.OtherCarPlayers;
 import gameUtil.WinnerGetter;
 import guis.GuiRenderer;
@@ -72,13 +73,14 @@ public class MainGameLoop {
 			DisplayManager.updateDisplay();
 		}
 
-		System.out.println(WinnerGetter.getWinners());
+		// System.out.println(WinnerGetter.getWinners());
 
 		OtherCarPlayers.getClient().setDataToSend("KK");
 		guiRenderer.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
+		EndScreen.main(args);
 	}
 
 }

@@ -4,9 +4,12 @@ import entities.Camera;
 import entities.Light;
 import gameCom.Client;
 import gameUtil.CarPlayer;
+import gameUtil.EndScreen;
 import gameUtil.OtherCarPlayers;
 import gameUtil.WinnerGetter;
 import guis.GuiRenderer;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
@@ -22,16 +25,18 @@ class RunningPlayer extends Thread{
     private String ipToConnectTo = "localhost";
     private int ID;
     private boolean fullScreen;
+    private Stage primaryStage;
 
-    RunningPlayer(String ipToConnectTo, int ID, boolean fullScreen) {
+    RunningPlayer(String ipToConnectTo, int ID, boolean fullScreen, Stage primaryStage) {
         if (!Objects.equals(ipToConnectTo, ""))
             this.ipToConnectTo = ipToConnectTo;
         this.ID = ID;
         this.fullScreen = fullScreen;
+        this.primaryStage = primaryStage;
     }
 
     public void run(){
-        DisplayManager.createDisplay(String.valueOf(ID), fullScreen);
+        DisplayManager.createDisplay("Playing as: " + String.valueOf(ID), fullScreen);
         Loader loader = new Loader();
 
         Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
@@ -80,12 +85,20 @@ class RunningPlayer extends Thread{
             DisplayManager.updateDisplay();
         }
 
-        System.out.println(WinnerGetter.getWinners());
-
         OtherCarPlayers.getClient().setDataToSend("KK");
         guiRenderer.cleanUp();
         renderer.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
+
+        Platform.runLater(() -> {
+            EndScreen s = new EndScreen();
+            try {
+                s.start(primaryStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 }

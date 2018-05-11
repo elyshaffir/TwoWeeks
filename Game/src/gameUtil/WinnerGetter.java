@@ -30,7 +30,6 @@ public class WinnerGetter {
 
     private static void addWinner(int id){
         winners.add(id);
-        System.out.println("Added " + id);
     }
 
     public static Queue<Integer> getWinners() {
