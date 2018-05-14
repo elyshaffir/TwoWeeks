@@ -198,50 +198,6 @@ public class OtherCarPlayers {
         } catch (IndexOutOfBoundsException ignored){}
     }
 
-    public static void loadAllOtherCarsOld(Loader loader){
-        try{
-            if (client.getDataFromServer().charAt(0) == '{' && client.getDataFromServer().charAt(client.getDataFromServer().length() - 1) == '}'){
-                String[] allCars = client.getDataFromServer().substring(1, client.getDataFromServer().length() - 1).split("###");
-                for (String currentCar:allCars){
-                    if (!Objects.equals(currentCar.charAt(0), 'X')){
-                        String[] components = currentCar.split("_");
-                        CarPlayer newCar = new CarPlayer(
-                                loader,
-                                components[0],
-                                components[1],
-                                new Vector3f(Float.parseFloat(components[2]), Float.parseFloat(components[3]), Float.parseFloat(components[4])),
-                                components[5],
-                                components[6],
-                                new Vector3f(Float.parseFloat(components[7]), Float.parseFloat(components[8]), Float.parseFloat(components[9])),
-                                new Vector3f(Float.parseFloat(components[10]), Float.parseFloat(components[11]), Float.parseFloat(components[12]))
-                        );
-
-                        newCar.getFrontWheels().setRotX(Float.parseFloat(components[13]));
-                        newCar.getFrontWheels().setRotY(Float.parseFloat(components[14]));
-                        newCar.getFrontWheels().setRotZ(Float.parseFloat(components[15]));
-
-                        newCar.getBackWheels().setRotX(Float.parseFloat(components[16]));
-                        newCar.getBackWheels().setRotY(Float.parseFloat(components[17]));
-                        newCar.getBackWheels().setRotZ(Float.parseFloat(components[18]));
-
-                        newCar.getPlayer().setRotX(Float.parseFloat(components[19]));
-                        newCar.getPlayer().setRotY(Float.parseFloat(components[20]));
-                        newCar.getPlayer().setRotZ(Float.parseFloat(components[21]));
-
-                        String newCarID = components[22];
-                        otherCars.put(newCarID, newCar);
-                    }
-                }
-            }
-            else if (client.getDataFromServer().length() > 1){
-                // When the message is corrupted it creates fuckups in the communication later, needs cleaning.
-                System.out.println(client.getDataFromServer());
-                client.resetDataFromServer();
-                System.out.println(client.getDataFromServer());
-            }
-        } catch (IndexOutOfBoundsException ignored){}
-    }
-
     public static void renderAllOtherCars(MasterRenderer renderer){
         for (CarPlayer otherCar:otherCars.values()){
             renderer.processEntity(otherCar.getPlayer());
@@ -258,7 +214,7 @@ public class OtherCarPlayers {
         return client;
     }
 
-    public static HashMap<String, CarPlayer> getOtherCars() {
+    static HashMap<String, CarPlayer> getOtherCars() {
         return otherCars;
     }
 }

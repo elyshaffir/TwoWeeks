@@ -29,12 +29,12 @@ public class EndScreen extends Application implements EventHandler<ActionEvent>{
 
         playAgain = new Button("Play Again");
         playAgain.setOnAction(this);
-        playAgain.setLayoutX(0);
+        playAgain.setLayoutX(69);
         playAgain.setLayoutY(340);
 
         exit = new Button("Exit Game");
         exit.setOnAction(this);
-        exit.setLayoutX(0);
+        exit.setLayoutX(70);
         exit.setLayoutY(370);
 
 
@@ -70,7 +70,7 @@ public class EndScreen extends Application implements EventHandler<ActionEvent>{
         int winnerCounter = 1;
         final double DISTANCE_FROM_WINNERS = 10;
         for (String winner:WinnerGetter.getWinners()){
-            Label winnerToDisplay = new Label(winnerCounter + "st: Player number " + winner);
+            Label winnerToDisplay = new Label(winnerCounter + "st: " + winner);
             winnerToDisplay.setLayoutY(DISTANCE_FROM_WINNERS * winnerCounter);
             root.getChildren().add(winnerToDisplay);
             winnerCounter++;

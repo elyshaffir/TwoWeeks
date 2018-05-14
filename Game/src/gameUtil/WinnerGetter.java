@@ -6,19 +6,28 @@ import java.util.Queue;
 
 public class WinnerGetter {
     private static final int MAX_X = 3500;
-    private static Queue<String> winners = new LinkedList<>(); // Sorted by ID
+    private static Queue<String> winners = new LinkedList<>();
 
     public static void checkWinners(CarPlayer localPlayer, String localId){
         if (!isWinner(localId))
-            if (hasWon(localPlayer))
+            if (hasWon(localPlayer, false))
                 addWinner(localId);
         for (String id:OtherCarPlayers.getOtherCars().keySet())
             if (!isWinner(id))
-                if (hasWon(OtherCarPlayers.getOtherCars().get(id)))
+                if (hasWon(OtherCarPlayers.getOtherCars().get(id), true))
                     addWinner(id);
     }
 
-    private static boolean hasWon(CarPlayer carPlayer){
+    public static boolean allWon(String localId){
+        for (String id:OtherCarPlayers.getOtherCars().keySet())
+            if (!isWinner(id))
+                return false;
+        return isWinner(localId);
+    }
+
+    private static boolean hasWon(CarPlayer carPlayer, boolean other){
+        if (other)
+            return carPlayer.getPlayer().getPosition().x > MAX_X - 5;
         return carPlayer.getPlayer().getPosition().x > MAX_X;
     }
 
@@ -31,6 +40,7 @@ public class WinnerGetter {
 
     private static void addWinner(String id){
         winners.add(id);
+        System.out.println(id);
     }
 
     public static Queue<String> getWinners() {

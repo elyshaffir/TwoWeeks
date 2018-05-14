@@ -93,6 +93,8 @@ class RunningPlayer extends Thread{
             TextMaster.render();
 
             DisplayManager.updateDisplay();
+
+            if (WinnerGetter.allWon(ID)) break;
         }
 
         OtherCarPlayers.getClient().setDataToSend("KK");

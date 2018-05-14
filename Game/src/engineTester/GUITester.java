@@ -77,6 +77,11 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
             String id = IDField.getText();
             RunningPlayer runningPlayer = new RunningPlayer(IPField.getText(), id, false, primaryStage);
             runningPlayer.start();
+            try {
+                runningPlayer.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
