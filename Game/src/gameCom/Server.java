@@ -23,7 +23,7 @@ public class Server extends Thread {
             SS.configureBlocking(false);
             int ops = SS.validOps();
             SS.register(selector, ops, null);
-            HashMap<Integer, String> lastDataFrom = new HashMap<>();
+            HashMap<String, String> lastDataFrom = new HashMap<>();
             for (;;) {
                 int noOfKeys = selector.select(5000);
                 if (noOfKeys == 0) break;
@@ -58,18 +58,18 @@ public class Server extends Thread {
                                 // System.out.println("Client disconnected");
                             }
                             else{
-                                int toSendKey;
+                                String toSendKey;
                                 try{
-                                    toSendKey = Integer.valueOf(output.split("_")[22].split("###")[0]);
+                                    toSendKey = output.split("_")[22].split("###")[0];
                                 } catch (IndexOutOfBoundsException e){
-                                    toSendKey = Integer.valueOf(output.split("###")[0].substring(1));
+                                    toSendKey = output.split("###")[0].substring(1);
                                 }
 
                                 lastDataFrom.put(toSendKey, output);
                                 String toSend = "{";
                                 try{
-                                    for (int sendFromKey : lastDataFrom.keySet()) {
-                                        if (sendFromKey != toSendKey){
+                                    for (String sendFromKey : lastDataFrom.keySet()) {
+                                        if (!Objects.equals(sendFromKey, toSendKey)){
                                             toSend += lastDataFrom.get(sendFromKey);
                                         }
                                     }

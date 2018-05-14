@@ -2,6 +2,9 @@ package engineTester;
 
 import entities.Camera;
 import entities.Light;
+import fontMeshCreator.FontType;
+import fontMeshCreator.GUIText;
+import fontRendering.TextMaster;
 import gameCom.Client;
 import gameUtil.CarPlayer;
 import gameUtil.EndScreen;
@@ -11,6 +14,7 @@ import guis.GuiRenderer;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
@@ -19,15 +23,16 @@ import terrain.Terrain;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
+import java.io.File;
 import java.util.Objects;
 
 class RunningPlayer extends Thread{
     private String ipToConnectTo = "localhost";
-    private int ID;
+    private String ID;
     private boolean fullScreen;
     private Stage primaryStage;
 
-    RunningPlayer(String ipToConnectTo, int ID, boolean fullScreen, Stage primaryStage) {
+    RunningPlayer(String ipToConnectTo, String ID, boolean fullScreen, Stage primaryStage) {
         if (!Objects.equals(ipToConnectTo, ""))
             this.ipToConnectTo = ipToConnectTo;
         this.ID = ID;
@@ -38,6 +43,10 @@ class RunningPlayer extends Thread{
     public void run(){
         DisplayManager.createDisplay("Playing as: " + String.valueOf(ID), fullScreen);
         Loader loader = new Loader();
+        TextMaster.init(loader);
+
+        FontType font = new FontType(loader.loadTexture("text/arial"), new File("res/text/arial.fnt"));
+        GUIText playingAs = new GUIText("Playing as: " + String.valueOf(ID), .5f, font, new Vector2f(0, 0), 1f, true);
 
         Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
         Camera camera = new Camera(-90, 20, 0);
@@ -81,6 +90,7 @@ class RunningPlayer extends Thread{
             OtherCarPlayers.renderAllOtherCars(renderer);
 
             WinnerGetter.checkWinners(localPlayer, ID);
+            TextMaster.render();
 
             DisplayManager.updateDisplay();
         }
@@ -88,6 +98,7 @@ class RunningPlayer extends Thread{
         OtherCarPlayers.getClient().setDataToSend("KK");
         guiRenderer.cleanUp();
         renderer.cleanUp();
+        TextMaster.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
 

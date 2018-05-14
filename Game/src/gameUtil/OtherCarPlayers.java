@@ -10,9 +10,9 @@ import java.util.Objects;
 public class OtherCarPlayers {
     private static Client client;
     private static String lastDataToSend = "+";
-    private static HashMap<Integer, CarPlayer> otherCars = new HashMap<>();
+    private static HashMap<String, CarPlayer> otherCars = new HashMap<>();
 
-    public static void sendCar(CarPlayer car, int id){
+    public static void sendCar(CarPlayer car, String id){
 
         String dataToSend = "";
         dataToSend += car.getChasiModelString() + "_";
@@ -72,7 +72,7 @@ public class OtherCarPlayers {
             for (String currentCar:allCars){
                 if (!Objects.equals(currentCar.charAt(0), 'X')){
                     String[] components = currentCar.split("_");
-                    int carID = Integer.parseInt(components[22]);
+                    String carID = components[22];
                     if (otherCars.keySet().contains(carID)){ // if car already exists
                         CarPlayer carToModify = otherCars.get(carID);
 
@@ -228,7 +228,7 @@ public class OtherCarPlayers {
                         newCar.getPlayer().setRotY(Float.parseFloat(components[20]));
                         newCar.getPlayer().setRotZ(Float.parseFloat(components[21]));
 
-                        int newCarID = Integer.parseInt(components[22]);
+                        String newCarID = components[22];
                         otherCars.put(newCarID, newCar);
                     }
                 }
@@ -258,7 +258,7 @@ public class OtherCarPlayers {
         return client;
     }
 
-    public static HashMap<Integer, CarPlayer> getOtherCars() {
+    public static HashMap<String, CarPlayer> getOtherCars() {
         return otherCars;
     }
 }

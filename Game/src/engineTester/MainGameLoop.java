@@ -20,7 +20,7 @@ import textures.TerrainTexturePack;
 
 public class MainGameLoop {
 
-	private final static int ID = 13;
+	private final static String ID = "13";
 
 	public static void main(String[] args) {
 

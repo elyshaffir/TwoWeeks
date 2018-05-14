@@ -27,21 +27,9 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
 
         this.primaryStage = primaryStage;
 
-        Label IPLabel = new Label("IP:");
-        IPLabel.setLayoutX(10);
-        IPLabel.setLayoutY(20);
-
-        IPField = new TextField();
-        IPField.setPrefWidth(294);
-
-        NumberBinding IPFieldXBinding =
-                IPLabel.layoutXProperty().add(IPLabel.widthProperty().add(10));
-        IPField.layoutXProperty().bind(IPFieldXBinding);
-        IPField.layoutYProperty().bind(IPLabel.layoutYProperty());
-
         Label IDLabel = new Label("ID Number:");
-        IPLabel.setLayoutX(0);
-        IPLabel.setLayoutY(50);
+        IDLabel.setLayoutX(0);
+        IDLabel.setLayoutY(50);
 
         IDField = new TextField();
         IDField.setPromptText("Make sure you're the only one using that ID!");
@@ -52,6 +40,19 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
         IDField.layoutXProperty().bind(IDFieldXBinding);
         IDField.layoutYProperty().bind(IDLabel.layoutYProperty());
 
+
+
+        Label IPLabel = new Label("IP:");
+        IPLabel.setLayoutX(0);
+        IPLabel.setLayoutY(20);
+
+        IPField = new TextField();
+        IPField.setPrefWidth(294);
+
+        NumberBinding IPFieldXBinding =
+                IPLabel.layoutXProperty().add(IPLabel.widthProperty().add(10));
+        IPField.layoutXProperty().bind(IPFieldXBinding);
+        IPField.layoutYProperty().bind(IPLabel.layoutYProperty());
 
         connectButton = new Button("Connect");
 
@@ -73,9 +74,9 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
     @Override
     public void handle(ActionEvent event) {
         if (event.getSource() == connectButton) {
-            int id;
+            String id;
             try{
-                id = Integer.parseInt(IDField.getText());
+                id = IDField.getText();
             } catch (NumberFormatException e){
                 IDField.setText("");
                 IDField.setPromptText("Invalid ID number! try again.");

@@ -7,16 +7,16 @@ import java.nio.channels.SocketChannel;
 import java.util.Objects;
 
 public class Client extends Thread {
-    private int id;
+    private String id;
     private String ipToConnectTo = "localhost";
     private String dataToSend = "";
     private String dataFromServer = "";
 
-    public Client(int id) {
+    public Client(String id) {
         this.id = id;
     }
 
-    public Client(int id, String ipToConnectTo) {
+    public Client(String id, String ipToConnectTo) {
         this.id = id;
         this.ipToConnectTo = ipToConnectTo;
     }

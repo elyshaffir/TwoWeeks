@@ -69,7 +69,7 @@ public class EndScreen extends Application implements EventHandler<ActionEvent>{
     private void addWinnersToScreen(Group root){
         int winnerCounter = 1;
         final double DISTANCE_FROM_WINNERS = 10;
-        for (Integer winner:WinnerGetter.getWinners()){
+        for (String winner:WinnerGetter.getWinners()){
             Label winnerToDisplay = new Label(winnerCounter + "st: Player number " + winner);
             winnerToDisplay.setLayoutY(DISTANCE_FROM_WINNERS * winnerCounter);
             root.getChildren().add(winnerToDisplay);
