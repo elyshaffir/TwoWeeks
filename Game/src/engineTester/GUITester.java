@@ -27,13 +27,13 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
 
         this.primaryStage = primaryStage;
 
-        Label IDLabel = new Label("ID Number:");
+        Label IDLabel = new Label("ID:");
         IDLabel.setLayoutX(0);
         IDLabel.setLayoutY(50);
 
         IDField = new TextField();
         IDField.setPromptText("Make sure you're the only one using that ID!");
-        IDField.setPrefWidth(245);
+        IDField.setPrefWidth(294);
 
         NumberBinding IDFieldXBinding =
                 IDLabel.layoutXProperty().add(IDLabel.widthProperty().add(10));
@@ -74,14 +74,7 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
     @Override
     public void handle(ActionEvent event) {
         if (event.getSource() == connectButton) {
-            String id;
-            try{
-                id = IDField.getText();
-            } catch (NumberFormatException e){
-                IDField.setText("");
-                IDField.setPromptText("Invalid ID number! try again.");
-                return;
-            }
+            String id = IDField.getText();
             RunningPlayer runningPlayer = new RunningPlayer(IPField.getText(), id, false, primaryStage);
             runningPlayer.start();
         }
