@@ -80,10 +80,10 @@ public class CarPlayer {
         this.backWheels = new Player(wheelsStaticModel, new Vector3f(START_X + 4.5f, START_Y, START_Z), 0, 0, 0, 1, 1.5f);
     }
 
-    public void playLocal(String heightMap, Terrain terrain){
-        player.move2D(terrain, heightMap, false, true);
-        frontWheels.move2D(terrain, heightMap, true, true);
-        backWheels.move2D(terrain, heightMap, true, true);
+    public void playLocal(String heightMap, Terrain terrain, boolean doTerrainAdjust){
+        player.move2D(terrain, heightMap, false, doTerrainAdjust);
+        frontWheels.move2D(terrain, heightMap, true, doTerrainAdjust);
+        backWheels.move2D(terrain, heightMap, true, doTerrainAdjust);
         frontWheels.stick(player, 2);
         backWheels.stick(player, -4.5f);
     }

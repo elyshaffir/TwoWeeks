@@ -56,7 +56,7 @@ public class MainGameLoop {
 		while (!Display.isCloseRequested()){
 			camera.move(localPlayer.getPlayer(), false, true);
 			if (!WinnerGetter.getWinners().contains(ID))
-				localPlayer.playLocal("terrain/heightmap", terrain);
+				localPlayer.playLocal("terrain/heightmap", terrain, false);
 
 			renderer.processEntity(localPlayer.getPlayer());
 			renderer.processEntity(localPlayer.getFrontWheels());
