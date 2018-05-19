@@ -39,7 +39,8 @@ public class EndScreen extends Application implements EventHandler<ActionEvent>{
 
 
         Group root = new Group();
-        root.getChildren().addAll(playAgain, exit);
+        // root.getChildren().addAll(playAgain, exit);
+        root.getChildren().addAll(exit);
 
         addWinnersToScreen(root);
 

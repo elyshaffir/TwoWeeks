@@ -2,6 +2,7 @@ package engineTester;
 
 import entities.Camera;
 import entities.Light;
+import environmental.RaceStatues;
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
 import fontRendering.TextMaster;
@@ -13,6 +14,7 @@ import gameUtil.WinnerGetter;
 import guis.GuiRenderer;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -51,7 +53,7 @@ class RunningPlayer extends Thread{
         Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
         Camera camera = new Camera(-90, 20, 0);
 
-        TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("terrain/grassy2"));
+        TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("terrain/lava"));
         TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("terrain/mud"));
         TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("terrain/raceEnding"));
         TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("terrain/path"));
@@ -65,7 +67,7 @@ class RunningPlayer extends Thread{
         MasterRenderer renderer = new MasterRenderer(loader);
 
         CarPlayer localPlayer = new CarPlayer(loader, "models/chasi", "textures/blankTexture",
-                "models/wheels", "textures/blankTexture");
+                "models/wheels", "textures/black");
 
         localPlayer.getPlayer().increaseRotation(new Vector3f(0, 1, 0), 270);
         localPlayer.getFrontWheels().increaseRotation(new Vector3f(0, 1, 0), 270);
@@ -74,16 +76,25 @@ class RunningPlayer extends Thread{
         OtherCarPlayers.setClient(new Client(ID, ipToConnectTo));
         OtherCarPlayers.getClient().start();
 
+        RaceStatues.init(loader);
+
+        boolean disconnectedDisplayed = false;
+
         while (!Display.isCloseRequested()){
-            camera.move(localPlayer.getPlayer(), false, true);
+            camera.move(localPlayer.getPlayer(), false, false);
             if (!WinnerGetter.getWinners().contains(ID))
                 localPlayer.playLocal("terrain/heightmap", terrain, false);
 
+            if (OtherCarPlayers.getClient().isDisconnected() && !disconnectedDisplayed){
+                new GUIText("Disconnected from server.", .5f, font, new Vector2f(0, .1f), 1f, true);
+                disconnectedDisplayed = true;
+            }
             renderer.processEntity(localPlayer.getPlayer());
             renderer.processEntity(localPlayer.getFrontWheels());
             renderer.processEntity(localPlayer.getBackWheels());
             renderer.processTerrain(terrain);
             renderer.render(light, camera);
+            RaceStatues.render(renderer);
 
             OtherCarPlayers.sendCar(localPlayer, ID);
             OtherCarPlayers.loadAllOtherCars(loader);
@@ -95,6 +106,7 @@ class RunningPlayer extends Thread{
             DisplayManager.updateDisplay();
 
             if (WinnerGetter.allWon(ID)) break;
+            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) break;
         }
 
         OtherCarPlayers.getClient().setDataToSend("KK");

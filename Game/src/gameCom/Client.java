@@ -1,6 +1,7 @@
 package gameCom;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -11,6 +12,7 @@ public class Client extends Thread {
     private String ipToConnectTo = "localhost";
     private String dataToSend = "";
     private String dataFromServer = "";
+    private boolean disconnected;
 
     public Client(String id) {
         this.id = id;
@@ -19,12 +21,19 @@ public class Client extends Thread {
     public Client(String id, String ipToConnectTo) {
         this.id = id;
         this.ipToConnectTo = ipToConnectTo;
+        this.disconnected = false;
     }
 
     public void run() {
         try {
-            InetSocketAddress hA = new InetSocketAddress(ipToConnectTo, 5000);
-            SocketChannel client = SocketChannel.open(hA);
+            InetSocketAddress hA = new InetSocketAddress(ipToConnectTo, 5000); // Used to be 5000 but is problematic
+            SocketChannel client;
+            try{
+                client = SocketChannel.open(hA);
+            } catch (ConnectException e){
+                disconnected = true;
+                return;
+            }
             System.out.println("The Client is sending messages to server...");
             // Sending messages to the server
             while (!Objects.equals(dataToSend, "KK")){
@@ -56,5 +65,9 @@ public class Client extends Thread {
 
     public void resetDataFromServer(){
         dataFromServer = "";
+    }
+
+    public boolean isDisconnected(){
+        return disconnected;
     }
 }

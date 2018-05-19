@@ -10,8 +10,8 @@ import toolbox.Maths;
 
 public class TerrainShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = "src/terrain/terrainVertexShader.txt";
-    private static final String FRAGMENT_FILE = "src/terrain/terrainFragmentShader.txt";
+    private static final String VERTEX_FILE = "/terrain/terrainVertexShader.txt";
+    private static final String FRAGMENT_FILE = "/terrain/terrainFragmentShader.txt";
 
     private int location_transformationMatrix;
     private int location_projectionMatrix;

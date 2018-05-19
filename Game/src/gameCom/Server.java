@@ -1,5 +1,7 @@
 package gameCom;
 
+import serverConsole.MainServerConsole;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -10,12 +12,12 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Server extends Thread {
+
+    private static MainServerConsole console;
+
     public void run(){
         try {
-            // Get the selector
             Selector selector = Selector.open();
-            // System.out.println("Selector is open for making connection: " + selector.isOpen());
-            // Get the server socket channel and register using selector
             ServerSocketChannel SS = ServerSocketChannel.open();
             InetSocketAddress hostAddress = new InetSocketAddress("localhost", 5000);
 
@@ -24,6 +26,7 @@ public class Server extends Thread {
             int ops = SS.validOps();
             SS.register(selector, ops, null);
             HashMap<String, String> lastDataFrom = new HashMap<>();
+            promptConsole("Server is now open.");
             for (;;) {
                 int noOfKeys = selector.select(5000);
                 if (noOfKeys == 0) break;
@@ -32,11 +35,10 @@ public class Server extends Thread {
                 while (itr.hasNext()) {
                     SelectionKey ky = (SelectionKey) itr.next();
                     if (ky.isAcceptable()) {
-                        // The new client connection is accepted
                         SocketChannel client = SS.accept();
                         client.configureBlocking(false);
-                        // The new connection is added to a selector
                         client.register(selector, SelectionKey.OP_READ);
+                        promptConsole("Client connected.");
                     }
                     else if (ky.isReadable()) {
                         // Data is read from the client
@@ -46,7 +48,7 @@ public class Server extends Thread {
                             client.read(buffer);
                         } catch (IOException e){
                             client.close();
-                            // System.out.println("Client disconnected forcibly");
+                            promptConsole("Client disconnected.");
                             itr.remove();
                             continue;
                         }
@@ -55,7 +57,7 @@ public class Server extends Thread {
                             output = output.substring(1, output.length() - 1);
                             if (Objects.equals(output, "C")) {
                                 client.close();
-                                // System.out.println("Client disconnected");
+                                promptConsole("Client disconnected.");
                             }
                             else{
                                 String toSendKey;
@@ -99,11 +101,18 @@ public class Server extends Thread {
             selector.close();
         } catch (IOException e){
             e.printStackTrace();
+            promptConsole("An error occurred.");
         }
+        promptConsole("Server closed.");
     }
 
-    public static void main(String args[]){
-        runServer();
+    public static void setConsole(MainServerConsole console){
+        Server.console = console;
+    }
+
+    private static void promptConsole(String text){
+        System.out.println(text);
+        Server.console.promptConsole(text);
     }
 
     public static void runServer(){

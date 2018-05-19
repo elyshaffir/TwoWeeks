@@ -16,8 +16,8 @@ import java.io.IOException;
 
 public class Player extends Entity {
 
-    private static final float TURN_SPEED = 70;
-    private static final float GRAVITY = -2000;
+    private static final float TURN_SPEED = 140;
+    private static final float GRAVITY = -400;
 
     private float speed = 50;
     private float currentSpeed = 0;
@@ -107,8 +107,6 @@ public class Player extends Entity {
     }
 
     private void checkInputs(float mouseSensetivity, boolean controlPitch, boolean spin, float acceleration, float drag){
-        if (Keyboard.isKeyDown(Keyboard.KEY_Z))
-            System.out.println(currentSpeed);
 
         if (controlPitch)
             if (Keyboard.isKeyDown(Keyboard.KEY_W)){

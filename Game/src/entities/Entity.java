@@ -33,6 +33,12 @@ public class Entity {
 		this.rotX += axis.x * w;
 		this.rotY += axis.y * w;
 		this.rotZ += axis.z * w;
+		if (this.rotX > 360)
+			this.rotX -= 360;
+		if (this.rotY > 360)
+			this.rotY -= 360;
+		if (this.rotZ > 360)
+			this.rotZ -= 360;
 	}
 
 	void increaseRotation(float dx, float dy, float dz){

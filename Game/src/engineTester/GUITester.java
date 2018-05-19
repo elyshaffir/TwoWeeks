@@ -11,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class GUITester extends Application implements EventHandler<ActionEvent> {
+public class GUITester extends Application implements EventHandler<ActionEvent> { // Play again doesn't work faggot
 
     private Button connectButton;
     private TextField IPField;
@@ -75,7 +75,7 @@ public class GUITester extends Application implements EventHandler<ActionEvent> 
     public void handle(ActionEvent event) {
         if (event.getSource() == connectButton) {
             String id = IDField.getText();
-            RunningPlayer runningPlayer = new RunningPlayer(IPField.getText(), id, false, primaryStage);
+            RunningPlayer runningPlayer = new RunningPlayer(IPField.getText(), id, true, primaryStage);
             runningPlayer.start();
             try {
                 runningPlayer.join();
